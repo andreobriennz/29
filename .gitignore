@@ -50,3 +50,5 @@ Desktop.ini
 
 # Other
 .env
+
+client/src/out/
