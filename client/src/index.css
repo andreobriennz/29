@@ -45,6 +45,13 @@ nav a:hover {
 
 }
 
+/* message */
+.message {
+    position: fixed;
+    width: 100vw;
+    text-align: center;
+}
+
 /* Current player */
 .currentPlayer {
     text-align: center;
@@ -108,6 +115,6 @@ nav a:hover {
 
 
 /* pick up card */
-.newCard {
+.PickUp {
     text-align: center;
 }
