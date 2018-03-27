@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 // import logo from './logo.svg'
 import './App.css'
 
-import {Header} from './components/layout/Header'
-import {Game} from './components/Game'
+import {Header} from './components/Layout/Header'
+import {Game} from './components/Game/Game'
 
 class App extends Component {
 
