@@ -1,12 +1,22 @@
+import {info} from './../components/Info'
+
 const _ = require('lodash')
 
-class AI {
-    constructor (_self, opponent) {
-        this.stats = _self.stats
-        this.cards = _self.cards
+function percentWithoutShelter (population, shelters) {
+    return population - shelters
+}
 
-        this.opponent = {}
-        this.opponent.stats = opponent.stats
+function percentWithShelter (population, shelters) {
+    return 100 - this.percentWithoutShelter (population, shelters)
+}
+
+class AI {
+    constructor (state) {
+        this.state = state
+
+        this.user = state.currentPlayer
+        this.cards = state.players[this.user]
+        this.opponent = (state.currentPlayer === 0 ? 1 : 0)
 
         this.need = {
             swarm: 0,
@@ -15,47 +25,15 @@ class AI {
         }
     }
 
-    weights () {
-        this.need.swarm
-
-        this.need.bomber
-
-        this.need.shelter + 10
-    }
-
-    percentWithoutShelter (population, shelters) {
-        console.log('p'+population, 's'+shelters)
-        return population - shelters
-    }
-
-    percentWithShelter (population, shelters) {
-        return 100 - this.percentWithoutShelter (population, shelters)
-    }
-
-    determineNeeds () {
-        let opponentWithoutShelter = this.percentWithoutShelter (
-            this.opponent.stats.population, 
-            this.opponent.stats.shelters
-        )
-        let opponentWithShelter = 100 - opponentWithoutShelter
-
-        this.need.shelter = this.percentWithoutShelter (this.stats.population, this.stats.shelters)
-
-        this.need.bomber = opponentWithShelter
-
-        this.need.swarm = opponentWithoutShelter
-    }
-
     choose () {
-        this.determineNeeds ()
+        let players = this.players
+
+        this.determineNeeds (players)
 
         this.weights ()
 
         const max = _.max(Object.values(this.need))
         const best = (_.invert(this.need))[max]
-
-        console.log ('NEEDS:: ', this.need)
-        console.log ('BEST:: ', best)
 
         let want = []
         let kindaWant = []
@@ -70,11 +48,43 @@ class AI {
 
         want = [...want, ...kindaWant]
 
-        console.log ('WANT:: ', want)
+        info.event ('AI Decision', [this.need, best, want])
 
         if (want !== []) return want
 
+        // prob better to return want = [] 
         return false // choose to pick up card
+    }
+
+    determineNeeds (players) {
+        let opponentWithoutShelter = percentWithoutShelter (
+            this.state.players[this.opponent].stats.population, 
+            this.state.players[this.opponent].stats.shelters
+        )
+        let opponentWithShelter = 100 - opponentWithoutShelter
+
+        this.need.shelter = percentWithoutShelter (
+            this.state.players[this.user].population,
+            this.state.players[this.user].shelters
+        )
+
+        this.need.bomber = opponentWithShelter
+
+        this.need.swarm = opponentWithoutShelter
+    }
+
+    weights () {
+        this.need.swarm
+
+        this.need.bomber
+        if (this.state.players[this.opponent].stats.shelter < 1) {
+            this.need.bomber = 0
+        }
+
+        // this.need.shelter
+        // if ((this.need.shelter * 10) > (this.state.players[this.opponent].stats.population * 1.2)) {
+        //     this.need.shelter = this.need.shelter / 2
+        // }
     }
 }
 
@@ -140,10 +150,10 @@ export {AI}
 //         this.currentPlayer
 //         this.players = players
 
-//         this._self = players[currentPlayer]
+//         this.user = players[currentPlayer]
 //         // this.opponents = players.splice(currentPlayer, 1)
 
-//         this.goal = this._self
+//         this.goal = this.user
 
 //         console.log ('goal',this.goal)
 //     }
@@ -162,7 +172,7 @@ export {AI}
 
 //     tryNewMove () {
 //         const index = Math.floor(Math.random() * Math.floor(deck.cards.length))
-//         const newCard = deck.cards[index]
+//         const pickUp = deck.cards[index]
 //     }
 
 //     // newLesson (lesson = {
