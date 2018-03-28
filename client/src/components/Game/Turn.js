@@ -1,3 +1,5 @@
+import {info} from './../Info'
+
 class Turn {
     constructor (state) {
         this.state = state
@@ -7,7 +9,7 @@ class Turn {
         let round = this.state.round
         let currentPlayer = ++this.state.currentPlayer
 
-        if (currentPlayer > this.state.players.length) {
+        if (currentPlayer >= this.state.players.length) {
             currentPlayer = 0
             ++round
         }
