@@ -35,7 +35,7 @@ class Info {
     event (event, data = false) {
         console.log ('%c Event: '+event+' ', "background: #1c86f2; color: #fff; font-weight: bold")
         
-        this.table (data)
+        console.log (data)
     }
 
     success (message, data = false) {
@@ -53,6 +53,16 @@ class Info {
     }
 
     error (message, data = false) {
+        this.log (message, data)
+    }
+
+    alert (message, data = false) {
+        console.log ('%c '+message, "background: #f7ba45;; color: #fff; font-weight: bold")
+        
+        console.log (data)
+    }
+
+    log (message, data = false) {
         console.log ('%c '+message, "background: #f03c69;; color: #fff; font-weight: bold")
         
         this.table (data)
@@ -62,8 +72,8 @@ class Info {
         if (data === false) return
 
         if (data.constructor === Array) {
-            for (let i = 0; i < data.length; i++) {
-                console.table ('Data '+[i]+':', data[i])
+            for (let item of data) {
+                console.log ('Data: ', item)
             }
             return
         } 
