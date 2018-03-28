@@ -14,15 +14,11 @@ class Scores extends React.Component {
         return (
             <div>
                 <section className="currentPlayer">
-                    {this.state.currentPlayer === this.state.user ? (
-                        <h2>YOUR TURN!</h2>
-                    ) : (
-                        <h2>{this.state.players[this.state.currentPlayer].name}'s Turn</h2>
-                    )}
+                    <h2>{ this.props.name }'s turn!</h2>
                 </section>
                 
                 <section className="scores">
-                    <strong className="large">Round { this.state.round }</strong>
+                    <strong className="large">Round { this.props.round }</strong>
 
                     <div className="scores">
                         {this.state.players.map(function(player, index){
