@@ -1,6 +1,7 @@
 {
   "name": "29-backend",
   "version": "0.0.1",
+  "private": true,
   "description": "",
   "main": "server.js",
   "scripts": {
