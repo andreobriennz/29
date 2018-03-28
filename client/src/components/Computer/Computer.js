@@ -1,6 +1,7 @@
 import {AI} from './../../AI/AI'
 
 import {Action} from './../Game/Action'
+import {info} from './../Info'
 
 class Computer {
     constructor (state) {
@@ -10,18 +11,18 @@ class Computer {
     takeTurn () {
         const ai = new AI (this.state)
 
-        let card = ai.choose ()
+        let want = ai.choose ()
 
         const action = new Action (this.state)
 
         let newState
-        if (card == false || card == []) {
+        if (want == false || want == []) {
             newState = action.pickUp (this.state.currentPlayer)
-            console.log ('Computer picked up')
+            info.event ('Computer picked up')
         }
         else {
-            newState = action.playCard (card[0])
-            console.log ('Computer played: ', card[0].name)
+            newState = action.playCard (want[0])
+            info.alert ('Computer played: ', want[0].name)
         }
 
         return newState
