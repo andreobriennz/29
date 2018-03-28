@@ -6,32 +6,30 @@ const data = {
     cards: cards
 }
 
-class Deck {
-    constructor () {
-        this.cards = []
-        this.buildDeck()
-    }
+const Deck = {
+    cards: [],
 
-    buildDeck () {
-        data.cards.forEach(card => {
+    buildDeck: () => {
+        this.cards = []
+
+        cards.forEach(card => {
             let total = card.totalInDeck
             for (let i = 0; i < total; i++) {
                 this.cards.push (card)
             }
         });
 
-        // this.cards = l.shuffle(this.cards)
-    }
+        return this.cards
+    },
 
-    shuffleDeck () {
+    shuffleDeck: () => {
         this.buildDeck ()
 
-        // should then remove the
+        // should then remove the cards in players hands
+        // then use this function when cards run out
 
         return this.cards
     }
 };
 
-let deck = new Deck ()
-
-export { Deck, deck }
+export { Deck }
