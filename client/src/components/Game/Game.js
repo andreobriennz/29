@@ -1,8 +1,8 @@
 import React from 'react'
 
-import {Message} from './../Message'
+import {Message} from './../Game/Message'
 import {Player} from './../../models/Player'
-import {Scores} from './../Scores'
+import {Scores} from './../Game/Scores'
 import {Cards} from './Cards/Cards'
 import {PickUp} from './Cards/PickUp'
 import {info} from './../Info'
@@ -16,11 +16,11 @@ import {Computer} from './../Computer/Computer'
 // import uuid from 'uuid'
 
 class Game extends React.Component {
-    constructor () {
-        super()
+    constructor (props) {
+        super(props)
 
         this.state = {
-            round: 0,
+            round: 1,
             user: 0, // the user at the computer
             currentPlayer: 0, // can be human or AI
 
@@ -29,7 +29,8 @@ class Game extends React.Component {
                 new Player ('Computer', false)
             ],
 
-            deck: new Deck ()
+
+            deck: Deck.buildDeck ()
         }
 
         this.handlePickUp = this.handlePickUp.bind(this)
@@ -37,53 +38,59 @@ class Game extends React.Component {
     }
 
     componentDidMount () {
-        this.state.players.map((player, index) => {
+        setTimeout(() => {
+            this.state.players.map((player, index) => {
 
-            const action = new Action (this.state)
-            const newState = action.pickUp (index, 4)
-            this.setState ({
-                deck: newState.deck,
-                players: newState.players
+                const action = new Action (this.state)
+                const newState = action.pickUp (index, 4)
+                this.setState ({
+                    deck: newState.deck,
+                    players: newState.players
+                })
             })
-        })
+        }, 1000);
     }
 
     handlePickUp(e) {
         e.preventDefault()
 
-        const action = new Action (this.state)
-        const newState = action.pickUp ()
-        this.setState ({
-            deck: newState.deck,
-            players: newState.players },
-            
-            function () {
-                info.event (this.state.currentPlayer+'picked up', [
-                    this.state.players,
-                    this.state.players[this.state.currentPlayer].cards
-                ])
-
-                this.nextTurn ()
-            }
-        )
+        if (this.state.user === this.state.currentPlayer) {
+            const action = new Action (this.state)
+            const newState = action.pickUp ()
+            this.setState ({
+                deck: newState.deck,
+                players: newState.players },
+                
+                function () {
+                    info.event (this.state.currentPlayer+'picked up', [
+                        this.state.players,
+                        this.state.players[this.state.currentPlayer].cards
+                    ])
+    
+                    this.nextTurn ()
+                }
+            )
+        }
     }
 
     handlePlayCard(card, e) {
         e.preventDefault()
         
-        const action = new Action (this.state)
-        const newState = action.playCard (card)
-        this.setState ({
-            players: newState.players },
-
-            function () {
-                info.event (this.state.currentPlayer+' played '+card, [
-                    this.state.players
-                ])
-
-                this.nextTurn ()
-            }
-        )
+        if (this.state.user === this.state.currentPlayer) {
+            const action = new Action (this.state)
+            const newState = action.playCard (card)
+            this.setState ({
+                players: newState.players },
+    
+                function () {
+                    info.event (this.state.currentPlayer+' played '+card, [
+                        this.state.players
+                    ])
+    
+                    this.nextTurn ()
+                }
+            )
+        }
     }
 
     nextTurn () {
@@ -94,12 +101,16 @@ class Game extends React.Component {
             currentPlayer: newState.currentPlayer },
 
             function () {
-                info.event ('Next Turn', [
+                info.event (`Next Turn: ${this.state.currentPlayer}`, [
                     'round:'+this.state.round,
                 ])
 
-                if (this.state.players[this.state.currentPlayer].isHuman === false) {
-                    this.computersTurn ()
+                if (this.state.players[this.state.currentPlayer].isHuman === false) {                    
+                    setTimeout(() => {
+                        this.computersTurn ()
+
+                        this.nextTurn ()
+                    }, 1000);
                 }
             }
         )
@@ -109,16 +120,14 @@ class Game extends React.Component {
         const computer = new Computer (this.state)
         const newState = computer.takeTurn ()
 
-        setTimeout(() => {
-            this.setState ({
-                deck: newState.deck,
-                players: newState.players },
-                
-                function () {
-                    // this.nextTurn ()
-                }
-            )
-        }, 1000);
+        this.setState ({
+            deck: newState.deck,
+            players: newState.players },
+            
+            function () {
+                // this.nextTurn ()
+            }
+        )
     }
 
     render() {
@@ -127,7 +136,10 @@ class Game extends React.Component {
                 {(this.state.players[this.state.currentPlayer].isHuman === false) && 
                     <Message message="Computer thinking" />}
 
-                <Scores round={this.state.round} players={this.state.players} />
+                <Scores 
+                    name={this.state.players[this.state.currentPlayer].name} 
+                    round={this.state.round} 
+                    players={this.state.players} />
 
                 <Cards 
                     handlePlayCard={this.handlePlayCard}

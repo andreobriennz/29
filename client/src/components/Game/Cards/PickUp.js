@@ -1,7 +1,5 @@
 import React from 'react'
 
-import {deck} from './Deck'
-
 class PickUp extends React.Component {    
     render() {
         return (
