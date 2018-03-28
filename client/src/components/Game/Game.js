@@ -38,17 +38,15 @@ class Game extends React.Component {
     }
 
     componentDidMount () {
-        setTimeout(() => {
-            this.state.players.map((player, index) => {
+        this.state.players.map((player, index) => {
 
-                const action = new Action (this.state)
-                const newState = action.pickUp (index, 4)
-                this.setState ({
-                    deck: newState.deck,
-                    players: newState.players
-                })
+            const action = new Action (this.state)
+            const newState = action.pickUp (index, 4)
+            this.setState ({
+                deck: newState.deck,
+                players: newState.players
             })
-        }, 1000);
+        })
     }
 
     handlePickUp(e) {
