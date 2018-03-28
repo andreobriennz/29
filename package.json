@@ -1,6 +1,6 @@
 {
-  "name": "example-create-react-app-express",
-  "version": "1.0.0",
+  "name": "29",
+  "version": "0.0.1",
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon backend/server.js",
