@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import logo from './logo.svg'
 import './App.css'
 
-import {Header} from 'components/Layout/Header'
+
 import {Game} from './components/Game/Game'
 
 class App extends Component {
@@ -29,7 +29,6 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <Header />
 
                 {/* {this.state.response} */}
 
