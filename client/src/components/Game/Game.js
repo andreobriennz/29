@@ -25,7 +25,7 @@ class Game extends React.Component {
             currentPlayer: 0, // can be human or AI
 
             players: [
-                new Player ('Andre', true),
+                new Player ('Human 1', true),
                 new Player ('Computer', false)
             ],
 
