@@ -6,7 +6,7 @@ node_modules
 .grunt
 _SpecRunner.html
 __benchmarks__
-# build/
+build/
 remote-repo/
 coverage/
 flow-coverage/
