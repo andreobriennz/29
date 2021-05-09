@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "express": "^4.16.2",
-    "lodash": "^4.17.5"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
